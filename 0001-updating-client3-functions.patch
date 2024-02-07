@@ -1,0 +1,75 @@
+From f46d4fd7929b378b3cadb7dada082ccca981d807 Mon Sep 17 00:00:00 2001
+From: nd <neildaya19@gmail.com>
+Date: Mon, 5 Feb 2024 20:40:00 +0000
+Subject: [PATCH] updating client3 functions
+
+getDataPoint function should return correct tuple of stock name, bid_price, ask_price and price.
+getRatio function should return the ratio of the two stock prices
+main function should output correct stock info, prices and ratio
+---
+ __pycache__/client3.cpython-310.pyc | Bin 0 -> 1045 bytes
+ client3.py                          |  10 +++++++---
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+ create mode 100644 __pycache__/client3.cpython-310.pyc
+
+diff --git a/__pycache__/client3.cpython-310.pyc b/__pycache__/client3.cpython-310.pyc
+new file mode 100644
+index 0000000000000000000000000000000000000000..9bc3de2554775013be02ee19436675ff43fd890a
+GIT binary patch
+literal 1045
+zcmYjQ&u`N(6t*3wN%xBZU12vf2|*EKAcQ~_10;sHP5clbtfDBZU%PB++&M0Y(w)j5
+z(jB?;5Abi~%4sJqhyy2{lWoG0pTFn4Jb&+fj$T}xBRGC-{(!AIAwQk-|G+)+1ZVyo
+zjUtMsL{=-6wDg(u6q8(e(pOyhUx}=#nhJ0YAXMQ#GjE{|bKp<ulx~p^_vAc~*#dZb
+zi?b!*vvWXa^oShMBRX4lt2|#Pa2_KY@&eT0!jyKnyeJ!TMK<A*s>4NSzzQ^byh)~%
+zl7suWI|l(Yp*dwIduximMz*g>YyKFSlkM@9U2BK!jg3@y<8)W&w*BDtgWDSiBQT#I
+zCu;M{Ve*?2(#3f;d_)}QQ=EAlO`S|I>nb^<)*-e^l(&j34q55*GvAxALq4GsHt{CB
+z$B~CWzAs)FtwvoCaheLd3nBwhpv1>G9YHRv7JbOT#1<ojifug9NoGai=T>+3i@@q(
+zw3Dd9ADW~Kl^^H(En4`!RL8dE7yiLWTQCf{7Iln`s?a)yRnWM4z7gYO|GS~uoeYw+
+z-+8Caey68R+=unO;h?*oe}Z+3U#;KibkhVfd-vAxbFt6|yM@GFl*BMazJP|YkS^oH
+z=>j!wqwCH;9S*yumQAc7s8_<U@tSxJR$#q}7P==&s!=TBOr78zaqPY<$+nmbP9jdh
+zPWhrT^B7lzNbi+PcLTlLRmvErW~qD^MT0oWqG){WrR$LrS91|taUHwVzM9_@SZukL
+zhahT=!!j4fwJuA(m+MT{43g6Wxim6qn(W*%fcGc2vR3)hfBELwtM>)nF57T+a25|B
+ziVB{fG=+~j`cTlQ@KH3C%iuIifLZhqvZ97c3}Rbw1F<S<rKY(Fu#8e!6FTI6%~H+s
+xK4kX4W;k(8)scq-ymBc#a(&F#(1eYUhLn5U3%zhI43?Rom4Hp!VEhkf{{UXs1v&r#
+
+literal 0
+HcmV?d00001
+
+diff --git a/client3.py b/client3.py
+index 3fc09b7..da39099 100644
+--- a/client3.py
++++ b/client3.py
+@@ -35,14 +35,16 @@ def getDataPoint(quote):
+     stock = quote['stock']
+     bid_price = float(quote['top_bid']['price'])
+     ask_price = float(quote['top_ask']['price'])
+-    price = bid_price
++    price = (bid_price + ask_price) / 2
+     return stock, bid_price, ask_price, price
+ 
+ 
+ def getRatio(price_a, price_b):
+     """ Get ratio of price_a and price_b """
+     """ ------------- Update this function ------------- """
+-    return 1
++    if price_b == 0:
++        return
++    return price_a/price_b
+ 
+ 
+ # Main
+@@ -52,8 +54,10 @@ if __name__ == "__main__":
+         quotes = json.loads(urllib.request.urlopen(QUERY.format(random.random())).read())
+ 
+         """ ----------- Update to get the ratio --------------- """
++        prices = {}
+         for quote in quotes:
+             stock, bid_price, ask_price, price = getDataPoint(quote)
++            prices[stock] = price
+             print("Quoted %s at (bid:%s, ask:%s, price:%s)" % (stock, bid_price, ask_price, price))
+ 
+-        print("Ratio %s" % getRatio(price, price))
++        print("Ratio %s" % getRatio(prices["ABC"], prices["DEF"]))
+-- 
+2.39.2.windows.1
+
